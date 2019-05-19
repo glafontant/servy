@@ -1,4 +1,5 @@
 defmodule Servy.Handler do
+  require Logger
   
   def handle(request) do
     request
