@@ -1,13 +1,16 @@
 defmodule Servy.Plugins do
   @doc "Logs 404 request"
-  def track(%{status: 404, path: path} = conv) do
+
+  alias Servy.Conv
+
+  def track(%Conv{status: 404, path: path} = conv) do
     IO.puts "Warning: #{path} is on the loose!"
     conv
   end
 
-  def track(conv), do: conv
+  def track(%Conv{} = conv), do: conv
 
-  def rewrite_path(%{path: path} = conv) do
+  def rewrite_path(%Conv{path: path} = conv) do
     regex = ~r{\/(?<route>\w+)\?id=(?<id>\d+)}
     captures = Regex.named_captures(regex, path)
     rewrite_path_captures(conv, captures)
@@ -19,5 +22,5 @@ defmodule Servy.Plugins do
 
   def rewrite_path_captures(conv, nil), do: conv
 
-  def log(conv), do: IO.inspect conv
+  def log(%Conv{} = conv), do: IO.inspect conv
 end
