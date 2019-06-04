@@ -146,3 +146,19 @@ Accept: */*
 response = Servy.Handler.handle(request)
 
 IO.puts response
+
+
+request = """
+POST /patriots HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+name=RobGronkowski&type=TightEnd
+"""
+
+response = Servy.Handler.handle(request)
+
+IO.puts response

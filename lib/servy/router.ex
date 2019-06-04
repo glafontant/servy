@@ -32,6 +32,10 @@ defmodule Servy.Router do
     %{conv | status: 200, resp_body: "Patriot #{id} removed"}
   end
 
+  def route(%Conv{method: "POST", path: "/patriots"} = conv) do
+    %{conv | status: 201, resp_body: "Created a new Patriot: #{conv.params["name"]}, position: #{conv.params["type"]}!"}
+  end
+
   def route(%Conv{method: "GET", path: "/pages/" <> file} = conv) do
       Path.expand("../../pages", __DIR__)
       |> Path.join(file <> ".html")
