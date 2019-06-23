@@ -1,0 +1,7 @@
+<h1>All Active Patriot Players</h1>
+
+<ul>
+  <%= for patriot <- patriots do %>
+    <li><%= patriot.name %> - <%= patriot.type %></li>
+  <% end %>
+</ul>

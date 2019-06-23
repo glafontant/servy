@@ -1,0 +1,4 @@
+<h1>Show Patriots Player</h1>
+<p>
+  Is <%= patriot.name %> injured? <strong><%= patriot.injured_reserve %></strong>
+</p>
