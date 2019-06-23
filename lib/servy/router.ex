@@ -3,6 +3,7 @@ defmodule Servy.Router do
   @moduledoc "Handles routes."
 
   alias Servy.Conv
+  alias Servy.PatriotController
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.FileForm, only: [handle_form: 2]
@@ -14,7 +15,7 @@ defmodule Servy.Router do
   end
 
   def route(%Conv{method: "GET", path: "/patriots"} = conv) do
-    %{conv | status: 200, resp_body: "Kraft, Belichik, Brady" }
+    PatriotController.index(conv)
   end
 
   def route(%Conv{method: "GET", path: "/patriots/new"} = conv) do
@@ -25,15 +26,17 @@ defmodule Servy.Router do
   end
 
   def route(%Conv{method: "GET", path: "/patriots/" <> id} = conv) do
-    %{conv | status: 200, resp_body: "Patriot #{id}"}
+    params = Map.put(conv.params, "id", id)
+    PatriotController.show(conv, params)
   end
 
   def route(%Conv{method: "DELETE", path: "/patriots/" <> id} = conv) do
-    %{conv | status: 200, resp_body: "Patriot #{id} removed"}
+    params = Map.put(conv.params, "id", id)
+    PatriotController.delete(conv, params)
   end
 
   def route(%Conv{method: "POST", path: "/patriots"} = conv) do
-    %{conv | status: 201, resp_body: "Created a new Patriot: #{conv.params["name"]}, position: #{conv.params["type"]}!"}
+    PatriotController.create(conv, conv.params)
   end
 
   def route(%Conv{method: "GET", path: "/pages/" <> file} = conv) do
