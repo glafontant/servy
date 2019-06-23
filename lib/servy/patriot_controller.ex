@@ -2,25 +2,19 @@ defmodule Servy.PatriotController do
 
   alias Servy.ActiveRoster
   alias Servy.Patriot
+  alias Servy.PatriotView
 
-  defp patriot_item(patriot) do
-    "<li>#{patriot.name} - #{patriot.type}</li>"
-  end
-  
   def index(conv) do
-    items = 
+    patriots =
       ActiveRoster.active_players()
-      |> Enum.filter(&Patriot.is_safety/1)
       |> Enum.sort(&Patriot.order_asc_by_name/2)
-      |> Enum.map(&patriot_item/1)
-      |> Enum.join
 
-    %{conv | status: 200, resp_body: "<ul><li>#{items}</li></ul>" }
+    %{conv | status: 200, resp_body: PatriotView.index(patriots)}
   end
 
   def show(conv, %{"id" => id}) do
     patriot = ActiveRoster.get_patriot(id)
-    %{conv | status: 200, resp_body: "<h1>Patriot #{patriot.id}: #{patriot.name}</h1>"}
+    %{conv | status: 200, resp_body: PatriotView.show(patriot)}
   end
 
   def create(conv, %{"name" => name, "type" => type} = params) do
