@@ -26,7 +26,7 @@ defmodule HandlerTest do
      {"id":5,"injured_reserve":false,"name":"Stephen Gilmore","type":"Corner Back"},
      {"id":6,"injured_reserve":false,"name":"Kyle Van Noy","type":"Linebacker"},
      {"id":7,"injured_reserve":true,"name":"Jason McCourty","type":"Safety"},
-     {"id":8,"injured_reserve":false,"name":"Marcus Cannon","type":"Offensive Linesman"},
+     {"id":8,"injured_reserve":false,"name":"Marcus Cannon","type":"Offensive Lineman"},
      {"id":9,"injured_reserve":false,"name":"Devin McCourty","type":"Safety"},
      {"id":10,"injured_reserve":false,"name":"Donte Hightower","type":"Linebacker"}]
     """

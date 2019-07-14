@@ -10,7 +10,7 @@ defmodule Servy.ActiveRoster do
       %Patriot{id: 5, name: "Stephen Gilmore", type: "Corner Back"},      
       %Patriot{id: 6, name: "Kyle Van Noy", type: "Linebacker"},
       %Patriot{id: 7, name: "Jason McCourty", type: "Safety", injured_reserve: true},
-      %Patriot{id: 8, name: "Marcus Cannon", type: "Offensive Linesman"},
+      %Patriot{id: 8, name: "Marcus Cannon", type: "Offensive Lineman"},
       %Patriot{id: 9, name: "Devin McCourty", type: "Safety"},
       %Patriot{id: 10, name: "Donte Hightower", type: "Linebacker"}
     ]
