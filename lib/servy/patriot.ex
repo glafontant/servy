@@ -1,5 +1,6 @@
 defmodule Servy.Patriot do
-  
+  # TODO: It would be nice to specify attributes
+  @derive Jason.Encoder
   defstruct id: nil, name: "", type: "", injured_reserve: false
 
   def is_safety(patriot) do

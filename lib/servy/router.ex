@@ -14,6 +14,10 @@ defmodule Servy.Router do
      %{conv | status: 200, resp_body: "Celtics, Patriots, Bruins, Red Sox" }
   end
 
+  def route(%Conv{method: "GET", path: "/api/patriots"} = conv) do
+    Servy.Api.PatriotController.index(conv)
+  end
+
   def route(%Conv{method: "GET", path: "/patriots"} = conv) do
     PatriotController.index(conv)
   end
