@@ -39,6 +39,10 @@ defmodule Servy.Router do
     PatriotController.delete(conv, params)
   end
 
+  def route(%Conv{method: "POST", path: "/api/patriots"} = conv) do
+    Servy.Api.PatriotController.create(conv, conv.params)
+  end
+
   def route(%Conv{method: "POST", path: "/patriots"} = conv) do
     PatriotController.create(conv, conv.params)
   end
