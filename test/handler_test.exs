@@ -148,9 +148,9 @@ defmodule HandlerTest do
     """
   end
 
-  test "GET /pages/" do
+  test "GET /pages" do
     request = """
-    GET /about HTTP/1.1\r
+    GET /pages/about HTTP/1.1\r
     Host: example.com\r
     User-Agent: ExampleBrowser/1.0\r
     Accept: */*\r
@@ -162,7 +162,7 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 102\r
+    Content-Length: 388\r
     \r
     <h1>Title-Town USA</h1>
 
