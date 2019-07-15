@@ -1,5 +1,5 @@
 defmodule HandlerTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   import Servy.Handler, only: [handle: 1]
 
@@ -199,6 +199,26 @@ defmodule HandlerTest do
     Content-Length: 61\r
     \r
     Created a new Patriot: N'Keal Harry, position: Wide Receiver!
+    """
+  end
+
+  test "DELETE /patriots" do
+    request = """
+    DELETE /patriots/1 HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    assert response == """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 38\r
+    \r
+    <h1>Patriot 1: Tom Brady was cut!</h1>
     """
   end
 
