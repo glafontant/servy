@@ -7,7 +7,7 @@ defmodule Servy.PatriotController do
   def index(conv) do
     patriots =
       ActiveRoster.active_players()
-      |> Enum.sort(&Patriot.order_asc_by_name/2)
+      |> Enum.sort(&Patriot.order_asc_by_id/2)
 
     %{conv | status: 200, resp_body: PatriotView.index(patriots)}
   end

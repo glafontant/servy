@@ -1,5 +1,4 @@
 defmodule Servy.Handler do
-  require Logger
 
    @moduledoc "Handles HTTP requests."
 

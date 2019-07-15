@@ -7,7 +7,7 @@ defmodule Servy.Patriot do
     patriot.type == 'Safety'
   end
 
-  def order_asc_by_name(p1, p2) do
-    p1.name <= p2.name
+  def order_asc_by_id(p1, p2) do
+    p1.id <= p2.id
   end
 end

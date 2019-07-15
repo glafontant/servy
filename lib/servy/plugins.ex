@@ -1,10 +1,11 @@
 defmodule Servy.Plugins do
+  require Logger
   @doc "Logs 404 request"
 
   alias Servy.Conv
 
   def track(%Conv{status: 404, path: path} = conv) do
-    IO.puts "Warning: #{path} is on the loose!"
+    Logger.warn "Warning: #{path} is on the loose!"
     conv
   end
 
@@ -22,5 +23,5 @@ defmodule Servy.Plugins do
 
   def rewrite_path_captures(conv, nil), do: conv
 
-  def log(%Conv{} = conv), do: IO.inspect conv
+  def log(%Conv{} = conv), do: Logger.info conv
 end
