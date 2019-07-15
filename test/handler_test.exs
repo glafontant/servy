@@ -142,9 +142,9 @@ defmodule HandlerTest do
     assert response == """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 20\r
+    Content-Length: 34\r
     \r
-    Patriots, Celtics, Red Sox, Bruins
+    Celtics, Patriots, Bruins, Red Sox
     """
   end
 

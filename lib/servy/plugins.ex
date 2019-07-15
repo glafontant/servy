@@ -5,11 +5,17 @@ defmodule Servy.Plugins do
   alias Servy.Conv
 
   def track(%Conv{status: 404, path: path} = conv) do
-    Logger.warn "Warning: #{path} is on the loose!"
+    if Mix.env != :test do
+      Logger.warn "Warning: #{path} is on the loose!"
+    end
     conv
   end
 
   def track(%Conv{} = conv), do: conv
+
+  def rewrite_path(%{path: "/boston_teams"} = conv) do
+    %{ conv | path: "/boston_sports_teams" }
+  end
 
   def rewrite_path(%Conv{path: path} = conv) do
     regex = ~r{\/(?<route>\w+)\?id=(?<id>\d+)}
@@ -23,5 +29,10 @@ defmodule Servy.Plugins do
 
   def rewrite_path_captures(conv, nil), do: conv
 
-  def log(%Conv{} = conv), do: Logger.info conv
+  def log(%Conv{} = conv) do
+    if Mix.env == :dev do
+      Logger.info "#{inspect conv}"
+    end
+    conv
+  end
 end
