@@ -3,7 +3,7 @@ defmodule Servy.Api.PatriotController do
   def index(conv) do
     json = 
       Servy.ActiveRoster.active_players()
-      |> Jason.encode!
+      |> Poison.encode!
     conv = put_resp_content_body(conv, "application/json")
     %{ conv | status: 200, resp_body: json }
   end

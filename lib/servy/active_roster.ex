@@ -2,18 +2,11 @@ defmodule Servy.ActiveRoster do
   alias Servy.Patriot
 
   def active_players do
-    [
-      %Patriot{id: 1, name: "Tom Brady", type: "Quaterback"},
-      %Patriot{id: 2, name: "Julian Edleman", type: "Wide Receiver"},
-      %Patriot{id: 3, name: "Rob Gronkowski", type: "Tight End", injured_reserve: true},
-      %Patriot{id: 4, name: "Patrick Chung", type: "Safety", injured_reserve: true},
-      %Patriot{id: 5, name: "Stephen Gilmore", type: "Corner Back"},      
-      %Patriot{id: 6, name: "Kyle Van Noy", type: "Linebacker"},
-      %Patriot{id: 7, name: "Jason McCourty", type: "Safety", injured_reserve: true},
-      %Patriot{id: 8, name: "Marcus Cannon", type: "Offensive Lineman"},
-      %Patriot{id: 9, name: "Devin McCourty", type: "Safety"},
-      %Patriot{id: 10, name: "Donte Hightower", type: "Linebacker"}
-    ]
+    Path.expand("../servy/db", __DIR__)
+    |> Path.join("patriots.json")
+    |> read_json
+    |> Poison.decode!(as: %{"patriots" => [%Patriot{}]})
+    |> Map.get("patriots")
   end
 
   def get_patriot(id) when is_integer(id) do
@@ -22,5 +15,15 @@ defmodule Servy.ActiveRoster do
 
   def get_patriot(id) when is_binary(id) do
     id |> String.to_integer |> get_patriot
+  end
+
+  defp read_json(source) do
+    case File.read(source) do
+      {:ok, contents} ->
+        contents
+      {:error, reason} -> 
+        IO.inspect "Error reading #{source}: #{reason}"
+        "[]"
+    end
   end
 end

@@ -38,7 +38,7 @@ defmodule Servy.Parser do
   end
 
   def parse_params("application/json", params) do
-    params |> Jason.decode!
+    params |> Poison.decode!
   end
 
   def parse_params(_, _), do: %{}

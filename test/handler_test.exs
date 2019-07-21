@@ -238,16 +238,16 @@ defmodule HandlerTest do
     Content-Type: application/json\r
     Content-Length: 760\r
     \r
-    [{"id":1,"injured_reserve":false,"name":"Tom Brady","type":"Quaterback"},
-     {"id":2,"injured_reserve":false,"name":"Julian Edleman","type":"Wide Receiver"},
-     {"id":3,"injured_reserve":true,"name":"Rob Gronkowski","type":"Tight End"},
-     {"id":4,"injured_reserve":true,"name":"Patrick Chung","type":"Safety"},
-     {"id":5,"injured_reserve":false,"name":"Stephen Gilmore","type":"Corner Back"},
-     {"id":6,"injured_reserve":false,"name":"Kyle Van Noy","type":"Linebacker"},
-     {"id":7,"injured_reserve":true,"name":"Jason McCourty","type":"Safety"},
-     {"id":8,"injured_reserve":false,"name":"Marcus Cannon","type":"Offensive Lineman"},
-     {"id":9,"injured_reserve":false,"name":"Devin McCourty","type":"Safety"},
-     {"id":10,"injured_reserve":false,"name":"Donte Hightower","type":"Linebacker"}]
+    [{"type":"Quaterback","name":"Tom Brady","injured_reserve":false,"id":1},
+    {"type":"Wide Receiver","name":"Julian Edleman","injured_reserve":false,"id":2},
+    {"type":"Tight End","name":"Rob Gronkowski","injured_reserve":true,"id":3},
+    {"type":"Safety","name":"Patrick Chung","injured_reserve":true,"id":4},
+    {"type":"Corner Back","name":"Stephen Gilmore","injured_reserve":false,"id":5},
+    {"type":"Linebacker","name":"Kyle Van Noy","injured_reserve":false,"id":6},
+    {"type":"Safety","name":"Jason McCourty","injured_reserve":true,"id":7},
+    {"type":"Offensive Lineman","name":"Marcus Cannon","injured_reserve":false,"id":8},
+    {"type":"Safety","name":"Devin McCourty","injured_reserve":false,"id":9},
+    {"type":"Linebacker","name":"Donte Hightower","injured_reserve":false,"id":10}]
     """
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)

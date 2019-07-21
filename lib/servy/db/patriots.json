@@ -1,0 +1,57 @@
+{
+  "patriots": [
+    {
+      "id": 1,
+      "name": "Tom Brady",
+      "type": "Quaterback"
+    },
+    {
+      "id": 2,
+      "name": "Julian Edleman",
+      "type": "Wide Receiver"
+    },
+    {
+      "id": 3,
+      "name": "Rob Gronkowski",
+      "type": "Tight End",
+      "injured_reserve": true
+    },
+    {
+      "id": 4,
+      "name": "Patrick Chung",
+      "type": "Safety",
+      "injured_reserve": true
+    },
+    {
+      "id": 5,
+      "name": "Stephen Gilmore",
+      "type": "Corner Back"
+    },
+    {
+      "id": 6,
+      "name": "Kyle Van Noy",
+      "type": "Linebacker"
+    },
+    {
+      "id": 7,
+      "name": "Jason McCourty",
+      "type": "Safety",
+      "injured_reserve": true
+    },
+    {
+      "id": 8,
+      "name": "Marcus Cannon",
+      "type": "Offensive Lineman"
+    },
+    {
+      "id": 9,
+      "name": "Devin McCourty",
+      "type": "Safety"
+    },
+    {
+      "id": 10,
+      "name": "Donte Hightower",
+      "type": "Linebacker"
+    }
+  ]
+}
