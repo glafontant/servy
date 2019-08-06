@@ -10,6 +10,15 @@ defmodule Servy.Router do
 
   @pages_path Path.expand("../../pages", __DIR__)
 
+  def route(%Conv{method: "GET", path: "/kaboom/"} = conv) do
+    raise "Kaboom!"
+  end
+
+  def route(%Conv{method: "GET", path: "/recovery/" <> time} = conv) do
+    time |> String.to_integer |> :timer.sleep 
+    %{conv | status: 200, resp_body: "Recovered!" }
+  end
+
   def route(%Conv{method: "GET", path: "/boston_sports_teams"} = conv) do
      %{conv | status: 200, resp_body: "Celtics, Patriots, Bruins, Red Sox" }
   end
