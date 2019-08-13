@@ -4,15 +4,34 @@ defmodule Servy.Router do
 
   alias Servy.Conv
   alias Servy.PatriotController
+  alias Servy.VideoCam
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.FileForm, only: [handle_form: 2]
 
   @pages_path Path.expand("../../pages", __DIR__)
 
-  def route(%Conv{method: "GET", path: "/kaboom/"} = conv) do
-    raise "Kaboom!"
+  def route(%Conv{method: "GET", path: "/snapshots"} = conv) do
+    caller = self() # the request handling process
+
+    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam-1")}) end)
+    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam-2")}) end)
+    spawn(fn -> send(caller, {:result, VideoCam.get_snapshot("cam-3")}) end)
+
+    # in the caller we want to wait until the message arrives
+    # from the spawned process.
+    snapshot1 = receive do {:result, filename} -> filename end
+    snapshot2 = receive do {:result, filename} -> filename end
+    snapshot3 = receive do {:result, filename} -> filename end
+
+    snapshots = [snapshot1, snapshot2, snapshot3]
+
+    %{ conv | status: 200, resp_body: inspect snapshots }
   end
+
+  # def route(%Conv{method: "GET", path: "/kaboom"} = conv) do
+  #   raise "Kaboom!"
+  # end
 
   def route(%Conv{method: "GET", path: "/recovery/" <> time} = conv) do
     time |> String.to_integer |> :timer.sleep 
