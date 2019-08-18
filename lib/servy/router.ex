@@ -8,6 +8,7 @@ defmodule Servy.Router do
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.FileForm, only: [handle_form: 2]
+  import Servy.View, only: [render: 3]
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -21,7 +22,7 @@ defmodule Servy.Router do
 
     where_is_gilette = Task.await(task)
 
-    %{ conv | status: 200, resp_body: inspect {snapshots, where_is_gilette} }
+    render(conv, "sensors.eex", snapshots: snapshots, location: where_is_gilette)
   end
 
   # def route(%Conv{method: "GET", path: "/kaboom"} = conv) do
