@@ -5,10 +5,12 @@ defmodule Servy.Router do
   alias Servy.Conv
   alias Servy.PatriotController
   alias Servy.VideoCam
+  alias Servy.FourOhFourCounter, as: Counter
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.FileForm, only: [handle_form: 2]
   import Servy.View, only: [render: 3]
+
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -84,6 +86,11 @@ defmodule Servy.Router do
     |> Path.join(file <> ".html")
     |> File.read
     |> handle_file(conv)
+  end
+
+  def route(%Conv{method: "GET", path: "/404s"} = conv) do
+    counts = Counter.get_counts()
+    %{conv | status: 200, resp_body: inspect counts }
   end
 
   def route(%Conv{path: path} = conv) do
