@@ -13,7 +13,7 @@ defmodule Servy.TwoHundredCounter do
 
   def bump_count(path) do
     send @name, {self(), :bump_count, path}
-    receive do {:response, count} -> count end
+    receive do {:response, :ok} -> :ok end
   end
 
 
