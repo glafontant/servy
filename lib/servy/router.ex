@@ -6,6 +6,7 @@ defmodule Servy.Router do
   alias Servy.PatriotController
   alias Servy.VideoCam
   alias Servy.FourOhFourCounter, as: Counter
+  alias Servy.TwoHundredCounter, as: TwoCounter
 
   import Servy.FileHandler, only: [handle_file: 2]
   import Servy.FileForm, only: [handle_form: 2]
@@ -91,6 +92,11 @@ defmodule Servy.Router do
   def route(%Conv{method: "GET", path: "/404s"} = conv) do
     counts = Counter.get_counts()
     %{conv | status: 200, resp_body: inspect counts }
+  end
+
+  def route(%Conv{method: "GET", path: "/200s"} = conv) do
+    counts = TwoCounter.get_counts()
+    %{conv | status: 200, resp_body: inspect counts}
   end
 
   def route(%Conv{path: path} = conv) do
