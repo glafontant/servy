@@ -22,4 +22,27 @@ defmodule HttpServerTest do
   defp assert_successful_response({:ok, response}) do
     assert response.status_code == 200
   end
+
+  test "handle concurrent requests" do
+    spawn(HttpServer, :start, [4000])
+
+    parent = self()
+
+    max_concurrent_requests = 5
+
+    for _ <- 1..max_concurrent_requests do
+      spawn(fn ->
+        {:ok, response} = HTTPoison.get("http://localhost:4000/boston_sports_teams")
+        send parent, {:ok, response}
+      end)
+    end
+
+    for _ <- 1..max_concurrent_requests do
+      receive do
+        {:ok, response} ->
+          assert response.status_code == 200
+          assert response.body == "Celtics, Patriots, Bruins, Red Sox"
+      end
+    end
+  end
 end
