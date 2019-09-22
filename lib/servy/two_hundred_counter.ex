@@ -12,12 +12,13 @@ defmodule Servy.TwoHundredCounter do
   end
 
   def bump_count(path) do
-    send @name {self(), :bump_count, path}
+    send @name, {self(), :bump_count, path}
     receive do {:response, count} -> count end
   end
 
+
   def get_count(path) do
-    send @name {self(), :get_count, path}
+    send @name, {self(), :get_count, path}
     receive do {:response, count} -> count end
   end
 
@@ -28,19 +29,21 @@ defmodule Servy.TwoHundredCounter do
 
   #Server Interface
   def listen_loop(state) do
-    {sender, :bump_count, path} ->
-      new_state = Map.update(state, path, 1, &(&1 + 1))
-      send sender, {:response, :ok}
-      listen_loop(new_state)
-    {sender, :get_count, path} ->
-      count = Map.get(state, path, 0)
-      send sender, {:response, count}
-      listen_loop(state)
-    {sender, :get_counts} ->
-      send sender, {:response, state}
-      listen_loop(state)
-    unexpected ->
-      IO.puts "Unexpected message: #{inspect unexpected}"
-      listen_loop(state)
+    receive do
+      {sender, :bump_count, path} ->
+        new_state = Map.update(state, path, 1, &(&1 + 1))
+        send sender, {:response, :ok}
+        listen_loop(new_state)
+      {sender, :get_count, path} ->
+        count = Map.get(state, path, 0)
+        send sender, {:response, count}
+        listen_loop(state)
+      {sender, :get_counts} ->
+        send sender, {:response, state}
+        listen_loop(state)
+      unexpected ->
+        IO.puts "Unexpected message: #{inspect unexpected}"
+        listen_loop(state)
+    end
   end
 end
