@@ -1,85 +1,78 @@
-defmodule Servy.GenericServer do
-  def start(callback_module, initial_state \\ [], process_name) do
-    pid = spawn(__MODULE__, :listen_loop, [initial_state, callback_module])
-    Process.register(pid, process_name)
-    pid
-  end
-
-  def call(pid, message) do
-    send pid, {:call, self(), message}
-    receive do {:response, response} -> response end
-  end
-
-  def cast(pid, message) do
-    send pid, {:cast, message}
-  end
-
-  def listen_loop(state, callback_module) do
-    receive do
-      {:call, sender, message} when is_pid(sender) ->
-        {response, new_state} = callback_module.handle_call(message, state)
-        send sender, {:response, response}
-        listen_loop(new_state, callback_module)
-      {:cast, message} -> 
-        new_state = callback_module.handle_cast(message, state)
-        listen_loop(new_state, callback_module)
-      unexpected -> 
-        IO.puts "Unexpected message: #{inspect unexpected}"
-        listen_loop(state, callback_module)
-    end
-  end
-end
-
 defmodule Servy.PledgeServer do
 
-  @process_name __MODULE__
+  @name __MODULE__
 
-  alias Servy.GenericServer
+  use GenServer
 
-  # Client Inteface Functions
+  defmodule State do
+    defstruct cache_size: 3, pledges: []
+  end
+
+  # Client Inteface
 
   def start do
-    IO.puts "Starting the Pledge Server..."
-    GenericServer.start(__MODULE__, @process_name)
+    IO.puts "Starting the pledge server..."
+    GenServer.start(__MODULE__, %State{}, name: @name)
   end
 
   def create_pledge(name, amount) do
-   GenericServer.call @process_name, {:create_pledge, name, amount}
+   GenServer.call @name, {:create_pledge, name, amount}
   end
 
   def recent_pledges do
-    GenericServer.call @process_name, :recent_pledges
+    GenServer.call @name, :recent_pledges
   end
 
 
   def total_pledged do
-    GenericServer.call @process_name, :total_pledged
+    GenServer.call @name, :total_pledged
   end
 
   def clear do
-    GenericServer.cast @process_name, :clear
+    GenServer.cast @name, :clear
+  end
+
+  def set_cache_size(size) do
+    GenServer.cast @name, {:set_cache_size, size}
   end
 
   # Server Callbacks
 
-  def handle_cast(:clear, _state) do
-    []
+  def init(state) do
+    pledges = fetch_recent_pledges_from_service()
+    new_state = %{state | pledges: pledges}
+    {:ok, new_state}
   end
 
-  def handle_call(:total_pledged, state) do
-    total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
-    {total, state}
+  def handle_cast(:clear, state) do
+    # remember it's a struct the server is updating
+    {:noreply, %{state | pledges: []}}
   end
 
-  def handle_call(:recent_pledges, state) do
-    {state, state}
+  def handle_cast({:set_cache_size, size}, state) do
+    {:noreply, %{state | cache_size: size}}
   end
 
-  def handle_call({:create_pledge, name, amount}, state) do
+  def handle_call(:total_pledged, _from, state) do
+    total = Enum.map(state.pledges, &elem(&1, 1)) |> Enum.sum
+    {:reply, total, state}
+  end
+
+  def handle_call(:recent_pledges, _from, state) do
+    {:reply, state.pledges, state}
+  end
+
+  def handle_call({:create_pledge, name, amount}, _from, state) do
     {:ok, id} = send_pledge_to_external_service(name, amount)
-    most_recent_pleges = Enum.take(state, 2)
-    new_state = [ {name, amount} | most_recent_pleges ]
-    {id, new_state}
+    most_recent_pledges = Enum.take(state.pledges, state.cache_size - 1)
+    cached_pledges = [ {name, amount} | most_recent_pledges ]
+    new_state = %{state | pledges: cached_pledges}
+    {:reply, id, new_state}
+  end
+
+  def handle_info(message, state) do
+    IO.puts "Can't touch this #{inspect message}"
+    {:noreply, state}
   end
 
 
@@ -87,23 +80,31 @@ defmodule Servy.PledgeServer do
     # Codes goes here to send pledge to external service
     {:ok, "pledge-#{:rand.uniform(1000)}"}
   end
+
+  defp fetch_recent_pledges_from_service do
+    # Dodes go here to return recent pledges from external service
+
+    # Example return value:
+    [ {"paul allen", 1000}, {"jeff bezos", 2000}]
+  end
 end
 
 alias Servy.PledgeServer
 
-pid = PledgeServer.start()
+{:ok, pid} = PledgeServer.start()
 
 send pid, {:stop, "hammer time!"}
 
+PledgeServer.set_cache_size(4)
+
 IO.inspect PledgeServer.create_pledge("kraft", 100)
-IO.inspect PledgeServer.create_pledge("henry", 200)
-IO.inspect PledgeServer.create_pledge("grousbeck", 300)
 
-IO.inspect PledgeServer.create_pledge("pallotta", 400)
+# PledgeServer.clear()
 
-PledgeServer.clear()
-
-IO.inspect PledgeServer.create_pledge("mccourt", 500)
+# IO.inspect PledgeServer.create_pledge("henry", 200)
+# IO.inspect PledgeServer.create_pledge("grousbeck", 300)
+# IO.inspect PledgeServer.create_pledge("pallotta", 400)
+# IO.inspect PledgeServer.create_pledge("mccourt", 500)
 
 IO.inspect PledgeServer.recent_pledges()
 
