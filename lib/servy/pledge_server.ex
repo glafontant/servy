@@ -50,7 +50,9 @@ defmodule Servy.PledgeServer do
   end
 
   def handle_cast({:set_cache_size, size}, state) do
-    {:noreply, %{state | cache_size: size}}
+    resized_cache = Enum.take(state.pledges, size)
+    new_state = %{state | cache_size: size, pledges: resized_cache}
+    {:noreply, new_state}
   end
 
   def handle_call(:total_pledged, _from, state) do
@@ -91,13 +93,13 @@ end
 
 alias Servy.PledgeServer
 
-{:ok, pid} = PledgeServer.start()
+# {:ok, pid} = PledgeServer.start()
 
-send pid, {:stop, "hammer time!"}
+# send pid, {:stop, "hammer time!"}
 
-PledgeServer.set_cache_size(4)
+# PledgeServer.set_cache_size(4)
 
-IO.inspect PledgeServer.create_pledge("kraft", 100)
+# IO.inspect PledgeServer.create_pledge("kraft", 100)
 
 # PledgeServer.clear()
 
@@ -106,8 +108,8 @@ IO.inspect PledgeServer.create_pledge("kraft", 100)
 # IO.inspect PledgeServer.create_pledge("pallotta", 400)
 # IO.inspect PledgeServer.create_pledge("mccourt", 500)
 
-IO.inspect PledgeServer.recent_pledges()
+# IO.inspect PledgeServer.recent_pledges()
 
-IO.inspect PledgeServer.total_pledged()
+# IO.inspect PledgeServer.total_pledged()
 
 # IO.inspect Process.info(pid, :messages)
