@@ -13,7 +13,7 @@ defmodule Servy.Tracker do
     locations = %{
       "Fenway Park"  => %{ lat: "42.3467 N", lng: "71.0972 W"},
       "TD Garden"  => %{ lat: "42.3662 N", lng: "71.0621 W"},
-      "Gillete Stadium"  => %{ lat: "42.0909 N", lng: "71.2643 W"}
+      "Gillette Stadium"  => %{ lat: "42.0909 N", lng: "71.2643 W"}
     }
 
     Map.get(locations, stadium)
