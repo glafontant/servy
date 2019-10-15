@@ -1,5 +1,7 @@
 defmodule Servy.PledgeServer do
-
+  # assigns a unique name for this process
+  # in this case it will be the name of the module
+  # rather than :pledge_server
   @name __MODULE__
 
   use GenServer
@@ -10,9 +12,9 @@ defmodule Servy.PledgeServer do
 
   # Client Inteface
 
-  def start do
+  def start_link(_arg) do
     IO.puts "Starting the pledge server..."
-    GenServer.start(__MODULE__, %State{}, name: @name)
+    GenServer.start_link(__MODULE__, %State{}, name: @name)
   end
 
   def create_pledge(name, amount) do
@@ -91,7 +93,7 @@ defmodule Servy.PledgeServer do
   end
 end
 
-alias Servy.PledgeServer
+# alias Servy.PledgeServer
 
 # {:ok, pid} = PledgeServer.start()
 

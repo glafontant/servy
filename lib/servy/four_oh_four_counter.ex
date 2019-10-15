@@ -6,9 +6,9 @@ defmodule Servy.FourOhFourCounter do
 
   ### Client
 
-  def start do
+  def start_link(_arg) do
     IO.puts "Starting the FourOhFourCounter..."
-    GenServer.start(__MODULE__, %{}, @name)
+    GenServer.start_link(__MODULE__, %{}, name: @name)
   end
 
   def bump_count(path) do

@@ -1,9 +1,9 @@
 defmodule Servy.KickStarter do
   use GenServer
 
-  def start do
+  def start_link(_arg) do
     IO.puts "Starting the Kickstarter..."
-    GenServer.start(__MODULE__, :ok, name: __MODULE__)
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def get_server do
@@ -22,7 +22,7 @@ defmodule Servy.KickStarter do
     {:noreply, server_pid}
   end
 
-  def handle_call(:get_server, _from,  _state) do
+  def handle_call(:get_server, _from,  state) do
     {:reply, state, state}
   end
 
@@ -31,9 +31,5 @@ defmodule Servy.KickStarter do
     server_pid = spawn_link(Servy.HttpServer, :start, [4000])
     Process.register(server_pid, :http_server)
     server_pid
-  end
-
-  defp get_server do
-    Process.whereis(:http_server)
   end
 end
