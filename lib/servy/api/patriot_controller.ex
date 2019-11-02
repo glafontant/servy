@@ -8,7 +8,7 @@ defmodule Servy.Api.PatriotController do
     %{ conv | status: 200, resp_body: json }
   end
 
-  def create(conv, %{"name" => name, "type" => type} = params) do
+  def create(conv, %{"name" => name, "type" => type} = _params) do
     %{conv | status: 201,
              resp_body: "Created a new Patriot: #{name}, position: #{type}!"}
   end

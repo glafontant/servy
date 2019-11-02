@@ -29,6 +29,10 @@ defmodule Servy.FourOhFourCounter do
 
   # Server Callbacks
 
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
+
   def handle_cast(:clear, _state) do
     {:noreply, %{}}
   end
